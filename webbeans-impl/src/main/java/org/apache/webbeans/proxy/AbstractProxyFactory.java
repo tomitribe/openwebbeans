@@ -31,10 +31,10 @@ import java.util.logging.Logger;
 import org.apache.webbeans.config.WebBeansContext;
 import org.apache.webbeans.exception.WebBeansException;
 import org.apache.webbeans.logger.WebBeansLoggerFacade;
-import org.apache.xbean.asm5.ClassWriter;
-import org.apache.xbean.asm5.MethodVisitor;
-import org.apache.xbean.asm5.Opcodes;
-import org.apache.xbean.asm5.Type;
+import org.apache.xbean.asm9.ClassWriter;
+import org.apache.xbean.asm9.MethodVisitor;
+import org.apache.xbean.asm9.Opcodes;
+import org.apache.xbean.asm9.Type;
 
 /**
  * Base class for all OWB Proxy factories

@@ -89,7 +89,7 @@
         <openejb.version>3.1.4</openejb.version>
         <myfaces.version>1.2.9</myfaces.version>
         <myfaces2.version>2.2.3</myfaces2.version>
-        <xbean.version>4.1</xbean.version>
+        <xbean.version>4.21</xbean.version>
     </properties>
     
     <mailingLists>
@@ -591,7 +591,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.xbean</groupId>
-                <artifactId>xbean-asm5-shaded</artifactId>
+                <artifactId>xbean-asm9-shaded</artifactId>
                 <version>${xbean.version}</version>
             </dependency>
 

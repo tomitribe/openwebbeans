@@ -40,10 +40,10 @@ import org.apache.webbeans.intercept.NormalScopedBeanInterceptorHandler;
 import org.apache.webbeans.util.ClassUtil;
 import org.apache.webbeans.util.ExceptionUtil;
 import org.apache.webbeans.util.WebBeansUtil;
-import org.apache.xbean.asm5.ClassWriter;
-import org.apache.xbean.asm5.MethodVisitor;
-import org.apache.xbean.asm5.Opcodes;
-import org.apache.xbean.asm5.Type;
+import org.apache.xbean.asm9.ClassWriter;
+import org.apache.xbean.asm9.MethodVisitor;
+import org.apache.xbean.asm9.Opcodes;
+import org.apache.xbean.asm9.Type;
 
 /**
  * This factory creates proxies which delegate the
@@ -504,7 +504,7 @@ public class NormalScopeProxyFactory extends AbstractProxyFactory
      * if targetMethod is protected. Please see Java LangSpec 6.6.2 about the complex
      * rules for calling 'protected' methods.
      *
-     * @see #generateDelegationMethod(org.apache.xbean.asm5.ClassWriter, java.lang.reflect.Method, int, Class, String)
+     * @see #generateDelegationMethod(org.apache.xbean.asm9.ClassWriter, java.lang.reflect.Method, int, Class, String)
      */
     @SuppressWarnings("unused")
     public static Object delegateProtectedMethod(Method method, Object instance, Object[] params)

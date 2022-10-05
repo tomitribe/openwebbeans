@@ -53,16 +53,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.apache.webbeans.util.InjectionExceptionUtil.throwAmbiguousResolutionException;
 
@@ -108,6 +103,8 @@ public class InjectionResolver
 
     private boolean fastMatching;
 
+    private boolean cacheEmptyTypeResolution;
+
     private Bean<Instance<Object>> instanceBean;
     private Bean<Event<Object>> eventBean;
 
@@ -122,6 +119,7 @@ public class InjectionResolver
         alternativesManager = webBeansContext.getAlternativesManager();
         startup = true;
         fastMatching = false;
+        cacheEmptyTypeResolution = false;
         instanceBean = webBeansContext.getWebBeansUtil().getInstanceBean();
         eventBean = webBeansContext.getWebBeansUtil().getEventBean();
     }
@@ -129,6 +127,11 @@ public class InjectionResolver
     public void setFastMatching(boolean fastMatching)
     {
         this.fastMatching = fastMatching;
+    }
+
+    public void setCacheEmptyTypeResolution(boolean cacheEmptyTypeResolution)
+    {
+        this.cacheEmptyTypeResolution = cacheEmptyTypeResolution;
     }
 
     public void setStartup(boolean startup)
@@ -393,6 +396,10 @@ public class InjectionResolver
         {
             // maintain negative cache but use standard empty set so we can garbage collect
             resolvedBeansByName.put(cacheKey, Collections.EMPTY_SET);
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.log(Level.FINE, "DEBUG_ADD_BYNAME_CACHE_MISS", name);
+            }
         }
         else
         {
@@ -443,6 +450,12 @@ public class InjectionResolver
     public Set<Bean<?>> implResolveByType(boolean isDelegate, Type injectionPointType,
                                           Class<?> injectionPointClass, Annotation... qualifiers)
     {
+        if (logger.isLoggable(Level.FINE))
+        {
+            logger.log(Level.FINE, "DEBUG_ADD_BYTYPE_CALLED",
+                    new Object[] { isDelegate, injectionPointType, injectionPointClass, toString(qualifiers) });
+        }
+
         ScannerService scannerService = webBeansContext.getScannerService();
         String bdaBeansXMLFilePath = null;
         if (scannerService.isBDABeansXmlScanningEnabled())
@@ -556,17 +569,49 @@ public class InjectionResolver
             findNewBean(resolvedComponents, injectionPointType, qualifiers);
         }
 
-        if (!startup && !resolvedComponents.isEmpty())
+        if (!startup)
         {
-            resolvedBeansByType.put(cacheKey, resolvedComponents);
-
-            if (logger.isLoggable(Level.FINE))
+            if (!resolvedComponents.isEmpty())
             {
-                logger.log(Level.FINE, "DEBUG_ADD_BYTYPE_CACHE_BEANS", cacheKey);
+                resolvedBeansByType.put(cacheKey, resolvedComponents);
+
+                if (logger.isLoggable(Level.FINE))
+                {
+                    logger.log(Level.FINE, "DEBUG_ADD_BYTYPE_CACHE_BEANS", cacheKey);
+                }
+            }
+            else
+            {
+                if (cacheEmptyTypeResolution)
+                {
+                    resolvedBeansByType.put(cacheKey, Collections.EMPTY_SET);
+                }
+
+                // this will not be cached, so we want to log exactly what happened here
+                if (logger.isLoggable(Level.FINE))
+                {
+                    logger.log(Level.FINE, "DEBUG_ADD_BYTYPE_CACHE_MISS",
+                            new Object[] { isDelegate, injectionPointType, injectionPointClass, toString(qualifiers) });
+                }
             }
         }
 
         return resolvedComponents;
+    }
+
+    private static String toString(Annotation... qualifiers)
+    {
+        if (qualifiers == null)
+        {
+            return "null";
+        }
+
+        if (qualifiers.length == 0)
+        {
+            return "[]";
+        }
+
+        return "[ " + Arrays.stream(qualifiers).map(Annotation::toString).collect(Collectors.joining(", ")) + " ]";
     }
 
     private void findNewBean(Set<Bean<?>> resolvedComponents, Type injectionPointType, Annotation[] qualifiers)

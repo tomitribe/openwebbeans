@@ -80,6 +80,9 @@ public class OpenWebBeansConfiguration
     /**If generics should be taken into account for the matching*/
     public static final String FAST_MATCHING = "org.apache.webbeans.container.InjectionResolver.fastMatching";
 
+    /**Whether to cache is no beans were resolved by type resolution*/
+    public static final String CACHE_EMPTY_TYPE_RESOLUTION = "org.apache.webbeans.container.InjectionResolver.cacheEmptyTypeResolution";
+
     /**Use EJB Discovery or not*/
     public static final String USE_EJB_DISCOVERY = "org.apache.webbeans.spi.deployer.useEjbMetaDataDiscoveryService";
 

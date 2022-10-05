@@ -47,9 +47,9 @@
     <inceptionYear>2008</inceptionYear>
 
     <scm>
-        <connection>scm:git:https://gitbox.apache.org/repos/asf/openwebbeans.git</connection>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/openwebbeans.git</developerConnection>
-        <url>https://github.com/apache/openwebbeans</url>
+        <connection>scm:git:git@github.com:tomitribe/openwebbeans.git</connection>
+        <developerConnection>scm:git:git@github.com:tomitribe/openwebbeans.git</developerConnection>
+        <url>scm:git:git@github.com:tomitribe/openwebbeans.git</url>
       <tag>openwebbeans-2.0.27</tag>
     </scm>
 
@@ -106,6 +106,19 @@
         <jboss-public-repository>false</jboss-public-repository>
     </properties>
     
+    <distributionManagement>
+        <repository>
+            <id>tomitribe.releases.https</id>
+            <name>Tomitribe Release Distribution Repository</name>
+            <url>https://repository.tomitribe.com/service/local/staging/deploy/maven2</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>tomitribe.snapshots.https</id>
+            <name>Tomitribe Development Snapshot Repository</name>
+            <url>https://repository.tomitribe.com/content/repositories/snapshots-tomitribe</url>
+        </snapshotRepository>
+    </distributionManagement>
     <mailingLists>
         <mailingList>
             <name>OpenWebBeans Developer List</name>

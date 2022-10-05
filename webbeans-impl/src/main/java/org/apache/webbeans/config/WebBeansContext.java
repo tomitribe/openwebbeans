@@ -181,7 +181,7 @@ public class WebBeansContext
 
         beanManagerImpl.getInjectionResolver().setCacheEmptyTypeResolution(!"false".equalsIgnoreCase(getOpenWebBeansConfiguration()
                 .getProperty(OpenWebBeansConfiguration.CACHE_EMPTY_TYPE_RESOLUTION)));
-				
+
         injectableBeanManager = new InjectableBeanManager(beanManagerImpl);
         beanManagerBean = getWebBeansUtil().getManagerBean();
     }

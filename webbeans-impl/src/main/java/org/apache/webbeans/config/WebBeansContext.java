@@ -180,7 +180,7 @@ public class WebBeansContext
                 .getProperty(OpenWebBeansConfiguration.FAST_MATCHING)));
 
         beanManagerImpl.getInjectionResolver().setCacheEmptyTypeResolution(!"false".equalsIgnoreCase(getOpenWebBeansConfiguration()
-                .getProperty(OpenWebBeansConfiguration.CACHE_EMPTY_TYPE_RESOLUTION)));
+                .getProperty(OpenWebBeansConfiguration.CACHE_EMPTY_TYPE_RESOLUTION, "false")));
 
         injectableBeanManager = new InjectableBeanManager(beanManagerImpl);
         beanManagerBean = getWebBeansUtil().getManagerBean();
